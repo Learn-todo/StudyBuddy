@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html xmls="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>StudyBuddy</title>
-        
-    </head>
-    <body>
+{%extends 'base/main.html'%}
+
+{%block content%}
+<a href="{% url 'create-room'%}"><button> Create Room </button></a>
+
+
         {% for data in RoomObj %}
+        
         <div>
             @{{data.host.username}}
-            <a href = {% url 'room' data.id %}><p>{{data.name}}</p></a>
+            <a href={% url 'room' data.id %}><p>{{data.name}}</p></a>
             <p>{{data.description}}</p>
+            <a href="{% url 'update-room' data.id %}"><button>Edit</button></a>
+            <a href="{% url 'delete-room' data.id %}"><button>delete</button></a>
         <hr>
         </div>
         {% endfor %}
-    </body>
-</html> 
+{%endblock content%}
