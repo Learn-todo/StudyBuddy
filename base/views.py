@@ -29,6 +29,7 @@ def createRoom(request):
 
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
+    
     form = RoomForm(instance=room) #prefilled form
     if request.method == 'POST':
         form = RoomForm(request.POST,instance=room)
