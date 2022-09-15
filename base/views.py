@@ -1,16 +1,19 @@
 import imp
 from django.shortcuts import HttpResponse
 from django.shortcuts import render,redirect
-from .models import Room
+from .models import Room, Topic
 from .forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
-    RoomObj=Room.objects.all()
-    context = {'RoomObj':RoomObj}
+    search_ = request.GET.get('search_') if request.GET.get('search_') is not None else ""
+    RoomObj=Room.objects.filter(Q(topic__name__icontains='search_') | Q(name__icontains='search_') | Q(host__username__icontains='search_'))
+    topics = Topic.objects.all()
+    context = {'RoomObj':RoomObj, 'topics':topics}
     return render(request,'base/index.html',context)
 
 def room(request, pk):

@@ -4,3 +4,8 @@
 {% else %}
 <a href="{% url 'login' %}">click to Login</a>
 {% endif %}
+
+<form action="{% url 'home' %}" method="GET">
+    <input type="text" placeholder="Search" name="search_">
+    <input type="submit" value="search">
+</form>
