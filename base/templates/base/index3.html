@@ -1,0 +1,19 @@
+{%extends 'base/main.html'%}
+
+{%block content%}
+<a href="{% url 'create-room'%}"><button> Create Room </button></a>
+
+
+        {% for data in RoomObj %}
+        
+        <div>
+            @{{data.host.username}}
+            {{data.topic.name}}
+            <a href={% url 'room' data.id %}><p>{{data.name}}</p></a>
+            <p>{{data.description}}</p>
+            <a href="{% url 'update-room' data.id %}"><button>Edit</button></a>
+            <a href="{% url 'delete-room' data.id %}"><button>delete</button></a>
+        <hr>
+        </div>
+        {% endfor %}
+{%endblock content%}

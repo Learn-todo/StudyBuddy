@@ -1,18 +1,58 @@
-{%extends 'base/main.html'%}
+{% extends 'base/main.html' %}
 
-{%block content%}
-<a href="{% url 'create-room'%}"><button> Create Room </button></a>
-
-
-        {% for data in RoomObj %}
-        
-        <div>
-            @{{data.host.username}}
-            <a href={% url 'room' data.id %}><p>{{data.name}}</p></a>
-            <p>{{data.description}}</p>
-            <a href="{% url 'update-room' data.id %}"><button>Edit</button></a>
-            <a href="{% url 'delete-room' data.id %}"><button>delete</button></a>
-        <hr>
-        </div>
+{% block content %}
+<h1>
+    This is Home
+</h1>
+<h5>
+    {{count}} rooms available
+</h5>
+<a href="{% url 'create-room' %}">Create Room</a>
+<div>
+    {% for room in room %}
+    {% if request.user == room.host %}
+    <a href="{% url 'update-room' room.id %}">Update Room</a>
+    <a href="{% url 'delete-room' room.id %}">delete Room</a>
+    {% endif %}
+    <div>
+        <span>@{{room.host.username}}</span>
+        <h4>
+            {{ room.id }}--<a href="{% url 'room' room.id %}">{{ room.name }}</a>
+        </h4>
+        <small>{{room.topic}}</small>
+        <small>{{room.updated}}</small>
+    </div>
+    {% endfor %}
+    <h2><a href="{% url 'home' %}">Topics</a></h2>
+    <div>
+        {% for topic in topic %}
+        <h4>
+            <a href="{% url 'home' %}?q={{topic.name}} ">{{ topic }}</a>
+        </h4>
         {% endfor %}
-{%endblock content%}
+    </div>
+    <div>
+        <h1>
+            Recent Activity
+        </h1>
+        <div>
+            {% for message in message %}
+            <small>
+                <p>
+                <small>
+                    @{{message.user}}     {{message.updated|timesince}}  ago
+                </small>
+                </p>
+                <p>
+                    replied to post "{{message.room.name}}"
+                </p>
+                <p>
+                    {{ message.body|slice:":200" }}
+                </p>
+            </small>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

@@ -9,12 +9,28 @@ from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
 
 # Create your views here.
+# def home(request):
+#     search_ = request.GET.get('search_') if request.GET.get('search_') is not None else ""
+#     RoomObj=Room.objects.filter(Q(topic__name__icontains='search_') | Q(name__icontains='search_') | Q(host__username__icontains='search_'))
+#     topics = Topic.objects.all()
+#     context = {'RoomObj':RoomObj, 'topics':topics}
+#     return render(request,'base/index.html',context)
+
+
 def home(request):
-    search_ = request.GET.get('search_') if request.GET.get('search_') is not None else ""
-    RoomObj=Room.objects.filter(Q(topic__name__icontains='search_') | Q(name__icontains='search_') | Q(host__username__icontains='search_'))
+    q = request.GET.get("q") if request.GET.get("q") is not None else ''
+    rooms = Room.objects.filter(Q(name__icontains=q) | Q(topic__name=q) | Q(host__username__icontains=q))
     topics = Topic.objects.all()
-    context = {'RoomObj':RoomObj, 'topics':topics}
-    return render(request,'base/index.html',context)
+    room_count = rooms.count()
+    # message = Message.objects.filter(
+    #     Q(room_name_contains=q) |
+    #     Q(body__contains=q)
+    # )
+    context = {"room": rooms, "topic": topics, "count": room_count}
+    return render(request, 'base/index.html', context)
+
+
+
 
 def room(request, pk):
     RoomObj=Room.objects.get(id=pk)
@@ -75,3 +91,13 @@ def loginPage(request):
 def logoutPage(request):
     logout(request)
     return redirect('home')
+
+
+def createMessage(request, message):
+    return render(request)
+
+def deleteMessage(request, message):
+    return render(request)
+
+def updateMessage(request, message):
+    return render(request)
