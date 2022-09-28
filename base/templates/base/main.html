@@ -10,5 +10,9 @@
             {%block content%}
             
             {%endblock content%}
+        
+            {% for message in messages  %}
+            <div>{{message}}</div>
+            {% endfor %}
     </body>
 </html> 

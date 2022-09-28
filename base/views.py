@@ -3,6 +3,9 @@ from django.shortcuts import HttpResponse
 from django.shortcuts import render,redirect
 from .models import Room
 from .forms import RoomForm
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def home(request):
@@ -46,4 +49,27 @@ def deleteRoom(request, pk):
         return redirect ('home')
     context={'room':room}
     return render (request, 'base/delete.html',context)
-    
+
+
+def loginPage(request):
+    # form =
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            user = User.object.get(username=username)
+        except:
+            messages.error(request, 'Invalid username or password')
+        user=authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username or password does not exist')
+    context = {}
+    return render (request, 'base/login.html', context)
+
+
+def logoutPage(request):
+    logout(request)
+    return redirect('home')
