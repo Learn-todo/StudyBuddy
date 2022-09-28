@@ -6,6 +6,17 @@
     </head>
     <body>
         
-            {{RoomObj.name}}
+            {{room.name}}
+            <h2>Conversations</h2>
+            {% for message in messages %}
+                <p>{{message.body}}</p>
+                <a href="{% url 'delete-message' message.id %}">Delete</a>
+            {% endfor %}
+            
+            <form action="" method="POST">
+                    {% csrf_token %}
+                <input type="text" placeholder="your message goes here" name="body">   
+            </form>
+            
     </body>
 </html> 

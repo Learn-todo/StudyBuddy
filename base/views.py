@@ -1,12 +1,14 @@
+from email import message
 import imp
 from django.shortcuts import HttpResponse
 from django.shortcuts import render,redirect
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 # def home(request):
@@ -34,8 +36,16 @@ def home(request):
 
 def room(request, pk):
     RoomObj=Room.objects.get(id=pk)
-    context = {'RoomObj':RoomObj}
-    return render(request,"base/room.html",context=context)
+    messages = RoomObj.message_set.all()
+    if request.method == 'POST':
+        messages = Message.objects.create(
+            user = request.user,
+            room = RoomObj,
+            body = request.POST.get('body'),
+        )
+        return redirect(room,pk=RoomObj.id)
+    context = {'room':RoomObj, 'messages': messages}
+    return render(request,"base/room.html",context)
 
 def createRoom(request):
     form = RoomForm
@@ -44,8 +54,6 @@ def createRoom(request):
         if form.is_valid():
             form.save()
             return redirect('home')
-            
-        
     context = {'forms':form}
     return render (request,'base/SignUp.html',context)
 
@@ -92,12 +100,15 @@ def logoutPage(request):
     logout(request)
     return redirect('home')
 
-
-def createMessage(request, message):
-    return render(request)
-
-def deleteMessage(request, message):
-    return render(request)
-
 def updateMessage(request, message):
     return render(request)
+
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+    if request.method == 'POST':
+        message.delete()
+        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return redirect('home')
+    context={'message': message}
+    return render (request, 'base/delete.html', context)
+
