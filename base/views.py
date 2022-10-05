@@ -1,5 +1,4 @@
-from email import message
-import imp
+from .forms import MessageForm
 from django.shortcuts import HttpResponse
 from django.shortcuts import render,redirect
 from .models import Room, Topic, Message
@@ -102,7 +101,15 @@ def logoutPage(request):
     return redirect('home')
 
 def updateMessage(request, message):
-    return render(request)
+    message = Message.objects.get(id=pk) 
+    form = MessageForm(instance=message) #prefilled form
+    if request.method == 'POST':
+        form = MessageForm(request.POST,instance=message)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context = {'forms':form}
+    return render (request,'base/',context)
 
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)
