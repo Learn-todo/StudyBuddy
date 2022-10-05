@@ -9,7 +9,7 @@ urlpatterns = [
     path('delete-room/<str:pk>/', views.deleteRoom, name='delete-room'),
     path('login/',views.loginPage, name = 'login'),
     path('logout/',views.logoutPage, name = 'logout'),
-    path('updmessage/<str:pk>/', views.updateMessage, name = 'update-message'),
+    path('update-message/<str:pk>/', views.updateMessage, name = 'update-message'),
     path('delete-message/<str:pk>/', views.deleteMessage, name = 'delete-message'),
 
 ]

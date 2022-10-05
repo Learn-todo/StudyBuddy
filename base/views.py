@@ -58,7 +58,6 @@ def createRoom(request):
 
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
-    
     form = RoomForm(instance=room) #prefilled form
     if request.method == 'POST':
         form = RoomForm(request.POST,instance=room)
@@ -100,7 +99,7 @@ def logoutPage(request):
     logout(request)
     return redirect('home')
 
-def updateMessage(request, message):
+def updateMessage(request, pk):
     message = Message.objects.get(id=pk) 
     form = MessageForm(instance=message) #prefilled form
     if request.method == 'POST':
@@ -108,8 +107,8 @@ def updateMessage(request, message):
         if form.is_valid():
             form.save()
             return redirect('home')
-    context = {'forms':form}
-    return render (request,'base/',context)
+    context = {'form':form}
+    return render (request,'base/update-form.html',context)
 
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)

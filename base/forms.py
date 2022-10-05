@@ -7,9 +7,10 @@ class RoomForm(ModelForm):
         model = Room
         fields = '__all__'
         
+        
 
 class MessageForm(ModelForm):
     class Meta:
         model = Message
-        fields = '__all__'
-        
+        # fields = '__all__'
+        exclude = ['user', 'room']

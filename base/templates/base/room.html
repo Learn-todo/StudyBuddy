@@ -11,6 +11,7 @@
             {% for message in messages %}
                 <p>{{message.body}}</p>
                 <a href="{% url 'delete-message' message.id %}">Delete</a>
+                <a href="{% url 'update-message' message.id %}">Update</a>
             {% endfor %}
             
             <form action="" method="POST">
